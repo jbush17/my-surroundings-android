@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 public class ExampleInstrumentedTest {
 
     // Another change
+
     @Test
     public void useAppContext() throws Exception {
         // Context of the app under test.
