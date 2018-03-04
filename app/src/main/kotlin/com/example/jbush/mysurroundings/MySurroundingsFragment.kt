@@ -4,9 +4,12 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.location.LocationResult
+import kotlinx.android.synthetic.main.fragment_mysurroundings.*
 
 
 /**
@@ -19,9 +22,13 @@ import android.view.ViewGroup
  */
 class MySurroundingsFragment : Fragment() {
 
+    private val LOGTAG = MySurroundingsFragment::class.simpleName
+
     // TODO: Rename and change types of parameters
     private var mParam1: String? = null
     private var mParam2: String? = null
+
+    private var lastLocation: LocationResult? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +36,19 @@ class MySurroundingsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_mysurroundings, container, false)
+    }
+
+    fun onLocationUpdate (locationResult: LocationResult) {
+        lastLocation = locationResult
+        Log.v(LOGTAG, "Received location update " +
+                "${locationResult.lastLocation.latitude}," +
+                "${locationResult.lastLocation.longitude}," +
+                "${locationResult.lastLocation.bearing}" )
+
+        //update UI
+        latitude.setText(locationResult.lastLocation.latitude.toString())
+        longatude.setText(locationResult.lastLocation.longitude.toString())
+
     }
 
 

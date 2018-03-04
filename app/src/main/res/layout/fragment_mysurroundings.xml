@@ -4,10 +4,32 @@
              android:layout_height="match_parent"
              tools:context="com.example.jbush.mysurroundings.MySurroundingsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_mysurroundings_fragment"/>
 
+    <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
+            <TextView
+                    android:text="@string/latitudeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/latitudeLabel"/>
+            <TextView
+                    android:text="Latitude Not Here Yet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/latitude"/>
+        </TableRow>
+        <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
+        <TextView
+                android:text="@string/longatudeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/longatudeLabel"/>
+        <TextView
+                android:text="Longitude Not Here Yet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/longatude"/>
+        </TableRow>
+        <TableRow android:layout_width="match_parent" android:layout_height="match_parent"/>
+        <TableRow android:layout_width="match_parent" android:layout_height="match_parent"/>
+    </TableLayout>
 </FrameLayout>

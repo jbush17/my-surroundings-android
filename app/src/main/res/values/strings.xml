@@ -3,6 +3,13 @@
     <string name="ButtonText">Push Me</string>
     <string name="home">Home</string>
     <string name="settings">Settings</string>
-    <string name="hello_mysurroundings_fragment">My Surroundings, coming soon</string>
+
     <string name="hello_settings_fragment">Settings</string>
+
+    <!-- For Current Location Table -->
+    <string name="latitudeLabel">Latitude:</string>
+    <string name="longatudeLabel">Longitude:</string>
+    <string name="bearingLabel">Bearing:</string>
+    <string name="accuracyLabel">Accuracy:</string>
+
 </resources>
