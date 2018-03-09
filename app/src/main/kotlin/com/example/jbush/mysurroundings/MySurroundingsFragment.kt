@@ -1,13 +1,15 @@
 package com.example.jbush.mysurroundings
 
 import android.content.Context
-import android.net.Uri
+import android.location.Location
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TableRow
+import android.widget.TextView
 import com.google.android.gms.location.LocationResult
 import kotlinx.android.synthetic.main.fragment_mysurroundings.*
 
@@ -23,12 +25,10 @@ import kotlinx.android.synthetic.main.fragment_mysurroundings.*
 class MySurroundingsFragment : Fragment() {
 
     private val LOGTAG = MySurroundingsFragment::class.simpleName
+    private val MAX_LOCATIONS_IN_TABLE = 200
 
-    // TODO: Rename and change types of parameters
-    private var mParam1: String? = null
-    private var mParam2: String? = null
+    private var lastLocations : MutableList<Location>  = mutableListOf()
 
-    private var lastLocation: LocationResult? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,41 +39,38 @@ class MySurroundingsFragment : Fragment() {
     }
 
     fun onLocationUpdate (locationResult: LocationResult) {
-        lastLocation = locationResult
         Log.v(LOGTAG, "Received location update " +
                 "${locationResult.lastLocation.latitude}," +
                 "${locationResult.lastLocation.longitude}," +
                 "${locationResult.lastLocation.bearing}" )
 
-        //update UI
-        latitude.setText(locationResult.lastLocation.latitude.toString())
-        longatude.setText(locationResult.lastLocation.longitude.toString())
-
+        lastLocations.add(0, locationResult.lastLocation)
+        if (lastLocations.size > MAX_LOCATIONS_IN_TABLE) lastLocations.dropLast(lastLocations.size - MAX_LOCATIONS_IN_TABLE)
+        if (locationsTable.childCount > 1) locationsTable.removeViews(1, locationsTable.childCount - 1)
+        lastLocations.map { it.convertToTableRow() }.forEach { locationsTable.addView (it) }
     }
 
+    private fun Location.convertToTableRow () : TableRow {
+        val tr = TableRow (this@MySurroundingsFragment.context)
+        tr.layoutParams = TableRow.LayoutParams (TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT)
 
-    companion object {
-        // TODO: Rename parameter arguments, choose names that match
-        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-        private val ARG_PARAM1 = "param1"
-        private val ARG_PARAM2 = "param2"
+        val latTv = TextView (this@MySurroundingsFragment.context)
+        tr.addView(latTv)
+        val lonTv = TextView (this@MySurroundingsFragment.context)
+        tr.addView(lonTv)
+        val speedTv = TextView (this@MySurroundingsFragment.context)
+        tr.addView(speedTv)
+        val accuracyTv = TextView (this@MySurroundingsFragment.context)
+        tr.addView(accuracyTv)
 
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MySurroundingsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        fun newInstance(param1: String, param2: String): MySurroundingsFragment {
-            val fragment = MySurroundingsFragment()
-            val args = Bundle()
-            args.putString(ARG_PARAM1, param1)
-            args.putString(ARG_PARAM2, param2)
-            fragment.arguments = args
-            return fragment
-        }
+        latTv.text = this.latitude.toString()
+        lonTv.text = this.longitude.toString()
+        speedTv.text = this.speed.toString()
+        accuracyTv.text = this.accuracy.toString()
+
+        listOf<View>(latTv,lonTv,speedTv,accuracyTv).forEach { it.setPadding(0,0,30,0) }
+
+        return tr
     }
 }

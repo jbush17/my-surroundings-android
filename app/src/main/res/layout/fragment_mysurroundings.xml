@@ -5,31 +5,82 @@
              tools:context="com.example.jbush.mysurroundings.MySurroundingsFragment">
 
 
-    <TableLayout
+    <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
-            <TextView
-                    android:text="@string/latitudeLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/latitudeLabel"/>
-            <TextView
-                    android:text="Latitude Not Here Yet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/latitude"/>
-        </TableRow>
-        <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
-        <TextView
-                android:text="@string/longatudeLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/longatudeLabel"/>
-        <TextView
-                android:text="Longitude Not Here Yet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/longatude"/>
-        </TableRow>
-        <TableRow android:layout_width="match_parent" android:layout_height="match_parent"/>
-        <TableRow android:layout_width="match_parent" android:layout_height="match_parent"/>
-    </TableLayout>
+        <View
+                android:id="@+id/horizontal_divider"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_centerVertical="true"
+                android:background="@color/colorAccent"/>
+
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/horizontal_divider"
+                android:layout_alignParentLeft="true">
+            <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:stretchColumns="1"
+                    android:id="@+id/locationsTable">
+
+                <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
+                    <TextView
+                            android:text="@string/latitudeLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="3dp"
+                            android:gravity="left"
+                            android:background="@color/colorAccent"
+                            android:id="@+id/locationsHeadingRow"/>
+                    <TextView
+                            android:text="@string/longatudeLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="3dp"
+                            android:gravity="left"
+                            android:background="@color/colorAccent"
+                            android:id="@+id/longatudeLabel"/>
+                    <TextView
+                            android:text="@string/speedLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="3dp"
+                            android:gravity="left"
+                            android:background="@color/colorAccent"
+                            android:id="@+id/speedLabel"/>
+                    <TextView
+                            android:text="@string/accuracyLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="3dp"
+                            android:gravity="left"
+                            android:background="@color/colorAccent"
+                            android:id="@+id/accuracyLabel"/>
+                </TableRow>
+            </TableLayout>
+        </ScrollView>
+
+        <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/horizontal_divider"
+                android:layout_alignParentLeft="true">
+
+            <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
+                <TextView
+                        android:text="Current Speed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/speedLabelBottom"/>
+                <TextView
+                        android:text="100 mph"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            </TableRow>
+        </TableLayout>
+    </RelativeLayout>
 </FrameLayout>
