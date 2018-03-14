@@ -1,9 +1,11 @@
 package com.example.jbush.mysurroundings
 
 import android.content.Context
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,8 @@ import android.widget.TableRow
 import android.widget.TextView
 import com.google.android.gms.location.LocationResult
 import kotlinx.android.synthetic.main.fragment_mysurroundings.*
+import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicLong
 
 
 /**
@@ -28,6 +32,8 @@ class MySurroundingsFragment : Fragment() {
     private val MAX_LOCATIONS_IN_TABLE = 200
 
     private var lastLocations : MutableList<Location>  = mutableListOf()
+    private val tableRowsToLocations : MutableMap<View, Location> = mutableMapOf()
+    private val locationIdCouner = AtomicLong ()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,17 +50,25 @@ class MySurroundingsFragment : Fragment() {
                 "${locationResult.lastLocation.longitude}," +
                 "${locationResult.lastLocation.bearing}" )
 
+        // Add new entry to lastLocations and clen up the old ones
         lastLocations.add(0, locationResult.lastLocation)
         if (lastLocations.size > MAX_LOCATIONS_IN_TABLE) lastLocations.dropLast(lastLocations.size - MAX_LOCATIONS_IN_TABLE)
-        if (locationsTable.childCount > 1) locationsTable.removeViews(1, locationsTable.childCount - 1)
-        lastLocations.map { it.convertToTableRow() }.forEach { locationsTable.addView (it) }
+
+        // add new table row and remove any that are too old
+        val rowForLocation = locationResult.lastLocation.convertToTableRow(locationIdCouner.getAndIncrement())
+        tableRowsToLocations.put (rowForLocation,locationResult.lastLocation)
+        locationsTable.addView( rowForLocation, 1)
+        if (locationsTable.childCount > MAX_LOCATIONS_IN_TABLE) locationsTable.removeViews( MAX_LOCATIONS_IN_TABLE, MAX_LOCATIONS_IN_TABLE - locationsTable.childCount)
+        tableRowsToLocations.entries.removeIf { !locationsTable.views.contains(it.key) }
     }
 
-    private fun Location.convertToTableRow () : TableRow {
+    private fun Location.convertToTableRow (id : Long) : TableRow {
         val tr = TableRow (this@MySurroundingsFragment.context)
         tr.layoutParams = TableRow.LayoutParams (TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT)
 
+        val idTv = TextView (this@MySurroundingsFragment.context)
+        tr.addView(idTv)
         val latTv = TextView (this@MySurroundingsFragment.context)
         tr.addView(latTv)
         val lonTv = TextView (this@MySurroundingsFragment.context)
@@ -63,14 +77,28 @@ class MySurroundingsFragment : Fragment() {
         tr.addView(speedTv)
         val accuracyTv = TextView (this@MySurroundingsFragment.context)
         tr.addView(accuracyTv)
+        tr.isClickable = true
+        tr.setOnClickListener(TableRowClickListener())
 
+        idTv.text = id.toString()
         latTv.text = this.latitude.toString()
         lonTv.text = this.longitude.toString()
         speedTv.text = this.speed.toString()
         accuracyTv.text = this.accuracy.toString()
 
-        listOf<View>(latTv,lonTv,speedTv,accuracyTv).forEach { it.setPadding(0,0,30,0) }
+        listOf<View>(idTv, latTv,lonTv,speedTv,accuracyTv).forEach { it.setPadding(0,0,30,0) }
 
         return tr
+    }
+
+    private inner class TableRowClickListener : View.OnClickListener {
+        override fun onClick(v: View?) {
+            locationsTable.viewsExceptFirst.forEach { it.setBackgroundColor(Color.TRANSPARENT) }
+            v?.setBackgroundColor( context?.getColor(R.color.colorAccent)!! )
+
+            val location = tableRowsToLocations.get(v)
+
+            Log.v(LOGTAG, "Location was clicked: ${location?.latitude}, ${location?.longitude}" )
+        }
     }
 }

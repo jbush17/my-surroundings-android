@@ -27,22 +27,27 @@
                     android:stretchColumns="1"
                     android:id="@+id/locationsTable">
 
-                <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
+                <TableRow android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/colorPrimary">
+                    <TextView
+                            android:text="@string/locationIdLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="3dp"
+                            android:gravity="left"
+                            android:id="@+id/locationIdLabel"/>
                     <TextView
                             android:text="@string/latitudeLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingEnd="3dp"
                             android:gravity="left"
-                            android:background="@color/colorAccent"
-                            android:id="@+id/locationsHeadingRow"/>
+                            android:id="@+id/latitudeLabel"/>
                     <TextView
                             android:text="@string/longatudeLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingEnd="3dp"
                             android:gravity="left"
-                            android:background="@color/colorAccent"
                             android:id="@+id/longatudeLabel"/>
                     <TextView
                             android:text="@string/speedLabel"
@@ -50,7 +55,6 @@
                             android:layout_height="wrap_content"
                             android:paddingEnd="3dp"
                             android:gravity="left"
-                            android:background="@color/colorAccent"
                             android:id="@+id/speedLabel"/>
                     <TextView
                             android:text="@string/accuracyLabel"
@@ -58,7 +62,6 @@
                             android:layout_height="wrap_content"
                             android:paddingEnd="3dp"
                             android:gravity="left"
-                            android:background="@color/colorAccent"
                             android:id="@+id/accuracyLabel"/>
                 </TableRow>
             </TableLayout>

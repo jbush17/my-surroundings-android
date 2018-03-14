@@ -12,5 +12,6 @@
     <string name="bearingLabel">Bearing</string>
     <string name="speedLabel">Speed</string>
     <string name="accuracyLabel">Accuracy</string>
+    <string name="locationIdLabel">ID</string>
 
 </resources>
