@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TableRow
 import android.widget.TextView
+import com.example.jbush.mysurroundings.location.LocationWrapper
 import com.google.android.gms.location.LocationResult
 import kotlinx.android.synthetic.main.fragment_mysurroundings.*
 import java.util.concurrent.atomic.AtomicInteger
@@ -44,19 +45,19 @@ class MySurroundingsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_mysurroundings, container, false)
     }
 
-    fun onLocationUpdate (locationResult: LocationResult) {
+    fun onLocationUpdate (locationWrapper: LocationWrapper) {
         Log.v(LOGTAG, "Received location update " +
-                "${locationResult.lastLocation.latitude}," +
-                "${locationResult.lastLocation.longitude}," +
-                "${locationResult.lastLocation.bearing}" )
+                "${locationWrapper.l.latitude}," +
+                "${locationWrapper.l.longitude}," +
+                "${locationWrapper.l.bearing}" )
 
         // Add new entry to lastLocations and clen up the old ones
-        lastLocations.add(0, locationResult.lastLocation)
+        lastLocations.add(0, locationWrapper.l)
         if (lastLocations.size > MAX_LOCATIONS_IN_TABLE) lastLocations.dropLast(lastLocations.size - MAX_LOCATIONS_IN_TABLE)
 
         // add new table row and remove any that are too old
-        val rowForLocation = locationResult.lastLocation.convertToTableRow(locationIdCouner.getAndIncrement())
-        tableRowsToLocations.put (rowForLocation,locationResult.lastLocation)
+        val rowForLocation = locationWrapper.l.convertToTableRow(locationIdCouner.getAndIncrement())
+        tableRowsToLocations.put (rowForLocation,locationWrapper.l)
         locationsTable.addView( rowForLocation, 1)
         if (locationsTable.childCount > MAX_LOCATIONS_IN_TABLE) locationsTable.removeViews( MAX_LOCATIONS_IN_TABLE, MAX_LOCATIONS_IN_TABLE - locationsTable.childCount)
         tableRowsToLocations.entries.removeIf { !locationsTable.views.contains(it.key) }
