@@ -1,8 +1,6 @@
 package com.example.jbush.mysurroundings.location
 
 import android.support.v7.app.AppCompatActivity
-import com.example.jbush.mysurroundings.location.LocationManager
-import com.example.jbush.mysurroundings.location.LocationWrapper
 
 abstract class LocationAwareActivity : AppCompatActivity() {
 
