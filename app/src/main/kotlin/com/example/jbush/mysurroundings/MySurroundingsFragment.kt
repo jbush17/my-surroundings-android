@@ -34,7 +34,18 @@ class MySurroundingsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_mysurroundings, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+        // populate table with all locations we know of
+        locationsTable.removeViews(1, locationsTable.childCount -1 )
+        LocationManager.locations.forEach { lw ->
+            locationsTable.addView( lw.convertToTableRow(), 1 )
+        }
+        if (locationsTable.childCount > MAX_LOCATIONS_IN_TABLE) locationsTable.removeViews( MAX_LOCATIONS_IN_TABLE, MAX_LOCATIONS_IN_TABLE - locationsTable.childCount)
+    }
+
     fun onLocationUpdate (locationWrapper: LocationWrapper) {
+        if (!this.isResumed) return // ignore location updates if not resumed
 
         // add new table row and remove any that are too old
         val rowForLocation = locationWrapper.convertToTableRow()
